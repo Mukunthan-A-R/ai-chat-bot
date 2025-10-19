@@ -17,15 +17,20 @@ app.get('/', (req: Request, res: Response) => {
    res.send('Hello World');
 });
 
+const conversations = new Map<string, string>();
+
 app.post('/api/chat', async (req: Request, res: Response) => {
-   const { prompt } = req.body;
+   const { prompt, conversationId } = req.body;
 
    const response = await client.responses.create({
       model: 'gpt-4o-mini',
       input: prompt,
       temperature: 0.2,
       max_output_tokens: 100,
+      previous_response_id: conversations.get(conversationId),
    });
+
+   conversations.set(conversationId, response.id);
 
    res.json({ message: response.output_text });
 });
