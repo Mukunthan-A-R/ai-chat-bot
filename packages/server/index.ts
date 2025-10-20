@@ -26,29 +26,33 @@ const chatSchema = z.object({
       .trim()
       .min(1, 'Prompt is Required')
       .max(1000, 'Prompt is too long (max 1000 characters)'),
-   conversationId: z.string().uuid(),
+   conversationId: z.uuid(),
 });
 
 app.post('/api/chat', async (req: Request, res: Response) => {
    const parseResult = chatSchema.safeParse(req.body);
 
    if (!parseResult.success) {
-      res.send(400).json(parseResult.error.format());
+      const formattedError = z.treeifyError(parseResult.error);
+      return res.status(400).json(formattedError);
    }
 
-   const { prompt, conversationId } = req.body;
+   try {
+      const { prompt, conversationId } = req.body;
+      const response = await client.responses.create({
+         model: 'gpt-4o-mini',
+         input: prompt,
+         temperature: 0.2,
+         max_output_tokens: 100,
+         previous_response_id: conversations.get(conversationId),
+      });
 
-   const response = await client.responses.create({
-      model: 'gpt-4o-mini',
-      input: prompt,
-      temperature: 0.2,
-      max_output_tokens: 100,
-      previous_response_id: conversations.get(conversationId),
-   });
+      conversations.set(conversationId, response.id);
 
-   conversations.set(conversationId, response.id);
-
-   res.json({ message: response.output_text });
+      res.json({ message: response.output_text });
+   } catch (err) {
+      res.status(500).json({ error: 'Failed to generate a response' });
+   }
 });
 
 app.get('/api/hello', (req: Request, res: Response) => {
