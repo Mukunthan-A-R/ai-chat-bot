@@ -3,6 +3,7 @@ import { Button } from './button';
 import { FaArrowUp } from 'react-icons/fa';
 import axios from 'axios';
 import { useRef, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 type FormData = {
    prompt: string;
@@ -52,7 +53,7 @@ const Chatbot = () => {
                         : 'bg-gray-100 text-black self-start'
                   }`}
                >
-                  {message.content}
+                  <ReactMarkdown>{message.content}</ReactMarkdown>
                </p>
             ))}
          </div>
