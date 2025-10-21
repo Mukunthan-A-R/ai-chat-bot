@@ -1,9 +1,9 @@
-import Chatbot from './components/ui/Chatbot';
+import ChatBot from './components/ui/Chatbot';
 
 function App() {
    return (
       <div className="p-4 h-screen">
-         <Chatbot></Chatbot>
+         <ChatBot />
       </div>
    );
 }

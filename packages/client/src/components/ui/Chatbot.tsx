@@ -18,7 +18,7 @@ type Message = {
    role: 'user' | 'bot';
 };
 
-const Chatbot = () => {
+const ChatBot = () => {
    const conversationId = useRef(crypto.randomUUID());
    const lastMessageRef = useRef<HTMLParagraphElement | null>(null);
    const [error, setError] = useState<string>('');
@@ -120,4 +120,4 @@ const Chatbot = () => {
    );
 };
 
-export default Chatbot;
+export default ChatBot;
