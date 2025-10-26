@@ -1,11 +1,11 @@
 import { useForm } from 'react-hook-form';
-import { Button } from './button';
+import { Button } from '../ui/button';
 import { FaArrowUp } from 'react-icons/fa';
 import axios from 'axios';
 import { useRef, useState } from 'react';
-import TypingIndicator from '../chat/TypingIndicator';
-import type { Message } from '../chat/ChatMessages';
-import ChatMessages from '../chat/ChatMessages';
+import TypingIndicator from './TypingIndicator';
+import type { Message } from './ChatMessages';
+import ChatMessages from './ChatMessages';
 
 type FormData = {
    prompt: string;
@@ -56,10 +56,11 @@ const ChatBot = () => {
 
    return (
       <div className="flex flex-col h-full">
-         <div className="flex flex-col flex-1 gap-3 mb-5"></div>
-         <ChatMessages messages={messages} />
-         {isBotTyping && <TypingIndicator />}
-         {error && <p className="text-red-500">{error}</p>}
+         <div className="flex flex-col flex-1 gap-3 mb-5">
+            <ChatMessages messages={messages} />
+            {isBotTyping && <TypingIndicator />}
+            {error && <p className="text-red-500">{error}</p>}
+         </div>
          <form
             onSubmit={handleSubmit(onSubmit)}
             onKeyDown={onKeyDown}
